@@ -35,7 +35,7 @@
 
 
             $query = "INSERT INTO users(first_name, last_name, email, password, repead_password) VALUES('$first_name', '$last_name', '$email', '$password', '$password')";
-            $result   = mysqli_query($con, $query);
+            $result = mysqli_query($con, $query);
 
             if ($result) {
                 echo "<div class='form'>

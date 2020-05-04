@@ -4,6 +4,8 @@
     <meta charset="utf-8"/>
     <title>Login</title>
     <link rel="stylesheet" href="style.css"/>
+    <link rel="stylesheet" href="assets/css/main.css"/>
+
 </head>
 <body>
 <?php
@@ -16,7 +18,9 @@
         $password = stripslashes($_REQUEST['password']);
         $password = mysqli_real_escape_string($con, $password);
         // Check user is exist in the database
-        $query    = "SELECT * FROM users WHERE first_name = '$first_name' AND password='$password' ";
+        $password_encript = md5($password);
+
+        $query = "SELECT * FROM users WHERE first_name = '$first_name' AND password='$password_encript' ";
         $result = mysqli_query($con, $query) or die(mysql_error());
         $rows = mysqli_num_rows($result);
         if ($rows == 1) {
@@ -30,16 +34,54 @@
                   </div>";
         }
     } else {
-?>
-    <form class="form" method="post" name="login">
-        <h1 class="login-title">Login</h1>
-        <input type="text" class="login-input" name="first_name" placeholder="First name" autofocus="true"/>
-        <input type="password" class="login-input" name="password" placeholder="Password"/>
-        <input type="submit" value="Login" name="submit" class="login-button"/>
-        <p class="link"><a href="registration.php">New Registration</a></p>
-  </form>
+    ?>
+<!-- Header -->
+            <header id="header">
+                <div class="logo"><span><p>Login</p></span></a></div>
+				<a href="#menu">Menu</a>
+			</header>
+
+		<!-- Nav -->
+			<nav id="menu">
+				<ul class="links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="registration.php">New Registration</a></li>
+				</ul>
+			</nav>
+
+		<!-- One -->
+			<section id="One" class="wrapper style3">
+				<div class="inner">
+					<header class="align-center">
+						<p>Sed amet nulla</p>
+						<h2>Elements</h2>
+					</header>
+				</div>
+			</section>
+
+
+        <form class="form" method="post" name="login">
+            <h1 class="login-title">Login</h1>
+            <div class="form-group">
+                <label>User name</label>
+                <input type="text" class="login-input" name="first_name" placeholder="First name" autofocus="true"/>
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" class="login-input" name="password" placeholder="Password"/>
+            </div>
+            <input type="submit" value="Login" name="submit" class="lgbtn"/>
+        </form>
 <?php
     }
 ?>
-</body>
+
+		<!-- Scripts -->
+            <script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/skel.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+    </body>
 </html>
