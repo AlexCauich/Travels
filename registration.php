@@ -5,63 +5,130 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registration</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="assets/css/main.css"/>
 </head>
 <body>
-    <?php
+
+    <?php 
         require('db.php');
-        // when form submitted, insert values the database.
-        if(isset($_REQUEST['first_name'])) {
-            //remove backslashes
-            $first_name = stripslashes($_REQUEST['first_name']);
-            //escapes special characters in a string
-            $first_name = mysqli_real_escape_string($con, $first_name);
 
-            $last_name = stripslashes($_REQUEST['last_name']);
-            //escapes special characters in a string
-            $last_name = mysqli_real_escape_string($con, $last_name);
+        $first_name = "";
+        $email = "";
+        $errors = array();
 
+        // Register user
 
-            $email    = stripslashes($_REQUEST['email']);
-            $email    = mysqli_real_escape_string($con, $email);
+        if(isset($_POST['reg_user'])) {
+            // receive all input values from  the form 
+            $first_name = mysqli_real_escape_string($con, $_POST['first_name']);
+            $last_name = mysqli_real_escape_string($con, $_POST['last_name']);
+            $email = mysqli_real_escape_string($con, $_POST['email']);
+            $password = mysqli_real_escape_string($con, $_POST['password']);
+            $repead_password = mysqli_real_escape_string($con, $_POST['repead_password']);
+
+            // form validation: ensure that the form is conrrently filled
+            // by adding (array_push()) corresponding error unto $errors array
+
+                    
+                    if($password != $repead_password) {
+                        echo "<div class='form'>
+                        <h3>The two passwords do not match.</h3><br/>
+                        <p class='link'>Click here to <a href='registration.php'>registration</a> again.</p>
+                        </div>";
+        
+                    }
+        
+        
+
+            // first check the database to make sure
+            // a user does not already exists with the same username and/or email
+            $user_check_query = "SELECT * FROM users WHERE first_name='$first_name' OR email='$email' LIMIT 1";
+            $result = mysqli_query($con, $user_check_query);
+            $user = mysqli_fetch_assoc($result);
             
-            $password = stripslashes($_REQUEST['password']);
-            $password = mysqli_real_escape_string($con, $password);
-
-            $repead_password = stripslashes($_REQUEST['repead_password']);
-            //escapes special characters in a string
-            $repead_password = mysqli_real_escape_string($con, $repead_password);
-
-            $password = md5($password);//encrypt the password before saving in the database
-
-
-            $query = "INSERT INTO users(first_name, last_name, email, password, repead_password) VALUES('$first_name', '$last_name', '$email', '$password', '$password')";
-            $result = mysqli_query($con, $query);
-
-            if ($result) {
+            if ($user) { // if user exists
+              if ($user['first_name'] === $first_name) {
+                array_push($errors, "Username already exists");
+              }
+          
+              if ($user['email'] === $email) {
+                array_push($errors, "email already exists");
+              }
+            }
+          
+            // Finally, register user if there are no errors in the form
+            if (count($errors) == 0) {
+                $password = md5($password);//encrypt the password before saving in the database
+          
+                $query = "INSERT INTO users(first_name, last_name, email, password, repead_password) VALUES('$first_name', '$last_name', '$email', '$password', '$password')";
+                mysqli_query($con, $query);
+                header('location: login.php');
+            }else {
                 echo "<div class='form'>
-                      <h3>You are registered successfully.</h3><br/>
-                      <p class='link'>Click here to <a href='login.php'>Login</a></p>
-                      </div>";
-            } else {
-                echo "<div class='form'>
-                      <h3>Required fields are missing.</h3><br/>
+                      <h3>Account already exists.</h3><br/>
                       <p class='link'>Click here to <a href='registration.php'>registration</a> again.</p>
                       </div>";
             }
+          
         } else {
     ?>
+
+    <!-- Header -->
+        <header id="header">
+            <div class="logo"><span><p>Sign In</p></span></a></div>
+            <a href="#menu">Menu</a>
+        </header>
+
+    <!-- Nav -->
+        <nav id="menu">
+            <ul class="links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="login.php">Login</a></li>
+            </ul>
+        </nav>
+
+    <!-- One -->
+        <section id="One" class="wrapper style3">
+            <div class="inner">
+                <header class="align-center">
+                    <p>Get everything you set your mind to</p>
+                    <h2>Sign In</h2>
+                </header>
+            </div>
+        </section>
+
+    
         <form class="form" action="" method="post">
-            <h1 class="login-title">Registration</h1>
-            <input type="text" class="login-input" name="first_name" placeholder="First name" required />
-            <input type="text" class="login-input" name="last_name" placeholder="Last name" required />
-            <input type="text" class="login-input" name="email" placeholder="Email Adress">
-            <input type="password" class="login-input" name="password" placeholder="Password">
-            <input type="password" class="login-input" name="repead_password" placeholder="Repead password">
-            <input type="submit" name="submit" value="Register" class="login-button">
-            <p class="link"><a href="login.php">Click to Login</a></p>
+            <div class="form-group">
+                <label>User name</label>
+                <input type="text" class="login-input" name="first_name" placeholder="First name" required />
+            </div>
+            <div class="form-group">
+                <label>Last name</label>
+                <input type="text" class="login-input" name="last_name" placeholder="Last name" required />
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="text" class="login-input" name="email" placeholder="Email Adress" required/>
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" class="login-input" name="password" placeholder="Password" required/>
+            </div>
+            <div class="form-group">
+                <label>Repead password</label>
+                <input type="password" class="login-input" name="repead_password" placeholder="Repead password"required/>
+            </div>
+            <input type="submit" name="reg_user" value="Register" class="lgbtn">
         </form>
-    <?php
-        }
-    ?>
+        <?php } ?>
+
+        		<!-- Scripts -->
+        <script src="assets/js/jquery.min.js"></script>
+        <script src="assets/js/jquery.scrollex.min.js"></script>
+        <script src="assets/js/skel.min.js"></script>
+        <script src="assets/js/util.js"></script>
+        <script src="assets/js/main.js"></script>
+
 </body>
 </html>
