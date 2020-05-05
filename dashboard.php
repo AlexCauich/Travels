@@ -81,14 +81,7 @@ include("auth_session.php");
 								</div>
 							</div>
 						</div>
-
-					</div>
-				</div>
-			</section>
-
-			<section id="one" class="wrapper style2">
-				<div class="inner">
-					<div class="grid-style">
+						
 
 						<div>
 							<div class="box">
@@ -129,7 +122,7 @@ include("auth_session.php");
 					</div>
 				</div>
 			</section>
-
+			
 			<section id="two" class="wrapper style3">
 				<div class="inner">
 					<header class="align-center">

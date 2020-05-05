@@ -3,9 +3,8 @@
 <head>
     <meta charset="utf-8"/>
     <title>Login</title>
-    <link rel="stylesheet" href="style.css"/>
-    <link rel="stylesheet" href="assets/css/main.css"/>
-
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="login.css">
 </head>
 <body>
 <?php
@@ -35,61 +34,40 @@
         }
     } else {
     ?>
-<!-- Header -->
-            <header id="header">
-                <div class="logo"><span><p>Login</p></span></a></div>
-				<a href="#menu">Menu</a>
-			</header>
-
-		<!-- Nav -->
-			<nav id="menu">
-				<ul class="links">
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="registration.php">Sign Up</a></li>
-				</ul>
-			</nav>
-
-		<!-- One -->
-			<section id="One" class="wrapper style3">
-				<div class="inner">
-					<header class="align-center">
-						<p>Sed amet nulla</p>
-						<h2>Login</h2>
-					</header>
-				</div>
-			</section>
 
 
-        <form class="form" method="post" name="login">
-            <h1 class="login-title">Login</h1>
-            <div class="form-group">
-                <label>User name</label>
-                <input type="text" class="login-input" name="first_name" placeholder="First name" autofocus="true"/>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="card">
+                <div class="card-header text-center"><h2>Login</h2></div>
+                <div class="card-body">
+                    <form method="post" name="login" class="form">
+                        <div class="form-group">
+                            <label>User name</label>
+                            <input type="text" class="form-control" name="first_name" placeholder="First name" autofocus="true" required/>
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" class="form-control" name="password" placeholder="Password" required/>
+                        </div>
+                        <input type="submit" value="Login" name="submit" class="btn btn-primary btn-block"/>
+                    </form>
+                </div>
+                <div class="card-footer text-center">
+                    <div class="form-group">
+                        <a href="registration.php">Sign In</a>
+                    </div>
+                    <div class="form-group">
+                        <a href="index.html">Home</a>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label>Password</label>
-                <input type="password" class="login-input" name="password" placeholder="Password"/>
-            </div>
-            <input type="submit" value="Login" name="submit" class="lgbtn"/>
-        </form>
+        </div>
+    </div>
 <?php
     }
 ?>
 
-            <!-- Footer -->
-            <footer id="footer">
-				<div class="container">
-					<ul class="icons">
-						<li><a href="#" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
-						<li><a href="#" class="icon fa-facebook"><span class="label">Facebook</span></a></li>
-						<li><a href="#" class="icon fa-instagram"><span class="label">Instagram</span></a></li>
-						<li><a href="#" class="icon fa-envelope-o"><span class="label">Email</span></a></li>
-					</ul>
-				</div>
-				<div class="copyright">
-					&copy; Untitled. All rights reserved.
-				</div>
-			</footer>
 		<!-- Scripts -->
             <script src="assets/js/jquery.min.js"></script>
 			<script src="assets/js/jquery.scrollex.min.js"></script>
