@@ -19,57 +19,54 @@
         // Register user
 
         if(isset($_POST['reg_user'])) {
+            
             // receive all input values from  the form 
             $first_name = mysqli_real_escape_string($con, $_POST['first_name']);
             $last_name = mysqli_real_escape_string($con, $_POST['last_name']);
             $email = mysqli_real_escape_string($con, $_POST['email']);
             $password = mysqli_real_escape_string($con, $_POST['password']);
             $repead_password = mysqli_real_escape_string($con, $_POST['repead_password']);
+            
+            if($password != $repead_password) {
 
-            // form validation: ensure that the form is conrrently filled
-            // by adding (array_push()) corresponding error unto $errors array
-
-                    
-                    if($password != $repead_password) {
-                        echo "<div class='form'>
-                        <h3>The two passwords do not match.</h3><br/>
+                echo "<div class='form'>
+                <h3>las contraseñas no coincidem .</h3><br/>
+                <p class='link'>Click here to <a href='registration.php'>registration</a> again.</p>
+                </div>";
+                
+            } else {
+                // first check the database to make sure
+                // a user does not already exists with the same username and/or email
+                $user_check_query = "SELECT * FROM users WHERE first_name='$first_name' OR email='$email' LIMIT 1";
+                $result = mysqli_query($con, $user_check_query);
+                $user = mysqli_fetch_assoc($result);
+                
+                if ($user) { // if user exists
+                if ($user['first_name'] === $first_name) {
+                    array_push($errors, "Username already exists");
+                }
+            
+                if ($user['email'] === $email) {
+                    array_push($errors, "email already exists");
+                }
+                }
+            
+                // Finally, register user if there are no errors in the form
+                if (count($errors) == 0) {
+                    $password = md5($password);//encrypt the password before saving in the database
+            
+                    $query = "INSERT INTO users(first_name, last_name, email, password, repead_password) VALUES('$first_name', '$last_name', '$email', '$password', '$password')";
+                    mysqli_query($con, $query);
+                    header('location: login.php');
+                }else {
+                    echo "<div class='form'>
+                        <h3>Account already exists.</h3><br/>
                         <p class='link'>Click here to <a href='registration.php'>registration</a> again.</p>
                         </div>";
-        
-                    }
-        
-        
+                
+                }   
+            }
 
-            // first check the database to make sure
-            // a user does not already exists with the same username and/or email
-            $user_check_query = "SELECT * FROM users WHERE first_name='$first_name' OR email='$email' LIMIT 1";
-            $result = mysqli_query($con, $user_check_query);
-            $user = mysqli_fetch_assoc($result);
-            
-            if ($user) { // if user exists
-              if ($user['first_name'] === $first_name) {
-                array_push($errors, "Username already exists");
-              }
-          
-              if ($user['email'] === $email) {
-                array_push($errors, "email already exists");
-              }
-            }
-          
-            // Finally, register user if there are no errors in the form
-            if (count($errors) == 0) {
-                $password = md5($password);//encrypt the password before saving in the database
-          
-                $query = "INSERT INTO users(first_name, last_name, email, password, repead_password) VALUES('$first_name', '$last_name', '$email', '$password', '$password')";
-                mysqli_query($con, $query);
-                header('location: login.php');
-            }else {
-                echo "<div class='form'>
-                      <h3>Account already exists.</h3><br/>
-                      <p class='link'>Click here to <a href='registration.php'>registration</a> again.</p>
-                      </div>";
-            }
-          
         } else {
     ?>
 
@@ -123,6 +120,20 @@
         </form>
         <?php } ?>
 
+        <!-- Footer -->
+        <footer id="footer">
+            <div class="container">
+                <ul class="icons">
+                    <li><a href="#" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
+                    <li><a href="#" class="icon fa-facebook"><span class="label">Facebook</span></a></li>
+                    <li><a href="#" class="icon fa-instagram"><span class="label">Instagram</span></a></li>
+                    <li><a href="#" class="icon fa-envelope-o"><span class="label">Email</span></a></li>
+                </ul>
+            </div>
+            <div class="copyright">
+                &copy; Untitled. All rights reserved.
+            </div>
+        </footer>
         		<!-- Scripts -->
         <script src="assets/js/jquery.min.js"></script>
         <script src="assets/js/jquery.scrollex.min.js"></script>
